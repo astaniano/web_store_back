@@ -1,0 +1,11 @@
+// create roles:
+//admin
+curl -i -X POST http://localhost:5000/roles -H 'Content-Type: application/json' -d '{"value": "ADMIN", "description": "main user"}'
+//user
+curl -i -X POST http://localhost:5000/roles -H 'Content-Type: application/json' -d '{"value": "USER", "description": "regular user"}'
+
+// activate
+curl -i -X GET http://localhost:5000/auth/activate/f1bcbc60-115e-4144-9292-17180f193050
+
+// sign-in
+curl -i -X POST http://localhost:5000/auth/signin -H 'Content-Type: application/json' -d '{"email": "ozov@ukr.net", "password": "1234567"}'

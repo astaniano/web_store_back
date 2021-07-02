@@ -4,8 +4,14 @@ curl -i -X POST http://localhost:5000/roles -H 'Content-Type: application/json' 
 //user
 curl -i -X POST http://localhost:5000/roles -H 'Content-Type: application/json' -d '{"value": "USER", "description": "regular user"}'
 
-// activate
-curl -i -X GET http://localhost:5000/auth/activate/f1bcbc60-115e-4144-9292-17180f193050
+// sign-up
+curl -i -X POST http://localhost:5000/auth/signup -H 'Content-Type: application/json' -d '{"email": "ozov8@ukr.net", "password": "1234567", "first_name": "john", "last_name": "smith"}'
 
 // sign-in
 curl -i -X POST http://localhost:5000/auth/signin -H 'Content-Type: application/json' -d '{"email": "ozov@ukr.net", "password": "1234567"}'
+
+// activate
+curl -i -X GET http://localhost:5000/auth/activate/f1bcbc60-115e-4144-9292-17180f193050
+
+// sign-out
+curl -i -X POST http://localhost:5000/auth/signout -H 'Content-Type: application/json' -d '{"email": "ozov@ukr.net", "password": "1234567"}' -b "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96b3ZAdWtyLm5ldCIsImlkIjo0LCJyb2xlcyI6W3siaWQiOjIsInZhbHVlIjoiVVNFUiIsImRlc2NyaXB0aW9uIjoicmVndWxhciB1c2VyIiwiY3JlYXRlZEF0IjoiMjAyMS0wNi0yOVQwMDoxOTo1MS42NDVaIiwidXBkYXRlZEF0IjoiMjAyMS0wNi0yOVQwMDoxOTo1MS42NDVaIiwiVXNlclJvbGVzIjp7ImlkIjo0LCJyb2xlSWQiOjIsInVzZXJJZCI6NH19XSwiaWF0IjoxNjI0OTMxMjUxLCJleHAiOjE2Mjc1MjMyNTF9.uq0HzV"

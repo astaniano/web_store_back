@@ -8,8 +8,8 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Role } from 'src/modules/roles/roles.model';
-import { UserRoles } from 'src/modules/roles/user-roles';
-import { Token } from '../auth/token.model';
+import { UserRolesModel } from 'src/modules/roles/user-roles.model';
+import { Token } from '../auth/token/token.model';
 
 interface UserCreationAttrs {
   email: string;
@@ -54,6 +54,6 @@ export class User extends Model<User, UserCreationAttrs> {
   @HasOne(() => Token)
   token: Token;
 
-  @BelongsToMany(() => Role, () => UserRoles)
+  @BelongsToMany(() => Role, () => UserRolesModel)
   roles: Role[];
 }

@@ -7,7 +7,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { User } from 'src/modules/users/users.model';
-import { UserRoles } from './user-roles';
+import { UserRolesModel } from './user-roles.model';
 
 interface RoleCreationAttrs {
   value: string;
@@ -36,6 +36,6 @@ export class Role extends Model<Role, RoleCreationAttrs> {
   @Column({ type: DataType.STRING, allowNull: false })
   description: string;
 
-  @BelongsToMany(() => User, () => UserRoles)
+  @BelongsToMany(() => User, () => UserRolesModel)
   users: User[];
 }

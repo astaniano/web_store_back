@@ -9,7 +9,7 @@ import { User } from 'src/modules/users/users.model';
 import { Role } from './roles.model';
 
 @Table({ tableName: 'user_roles', createdAt: false, updatedAt: false })
-export class UserRoles extends Model<UserRoles> {
+export class UserRolesModel extends Model<UserRolesModel> {
   @Column({
     type: DataType.INTEGER,
     unique: true,

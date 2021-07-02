@@ -5,10 +5,10 @@ import { User } from './modules/users/users.model';
 import { UsersModule } from './modules/users/users.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { Role } from './modules/roles/roles.model';
-import { UserRoles } from './modules/roles/user-roles';
+import { UserRolesModel } from './modules/roles/user-roles.model';
 import { AuthModule } from './modules/auth/auth.module';
 import { FilesModule } from './modules/files/files.module';
-import { Token } from './modules/auth/token.model';
+import { Token } from './modules/auth/token/token.model';
 import { CommonModule } from './modules/common/common.module';
 
 @Module({
@@ -25,7 +25,7 @@ import { CommonModule } from './modules/common/common.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, UserRoles, Token],
+      models: [User, Role, UserRolesModel, Token],
       autoLoadModels: true,
     }),
     UsersModule,

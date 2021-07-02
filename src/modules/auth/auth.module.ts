@@ -4,18 +4,17 @@ import { UsersModule } from 'src/modules/users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Token } from './token.model';
+import { Token } from './token/token.model';
 import { User } from '../users/users.model';
 import { CommonModule } from '../common/common.module';
+import { TokenService } from './token/token.service';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, TokenService],
   imports: [
     forwardRef(() => UsersModule),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET_KEY || 'SECRET',
-    }),
+    JwtModule.register({}),
     SequelizeModule.forFeature([Token, User]),
     CommonModule,
   ],

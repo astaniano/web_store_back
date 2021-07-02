@@ -79,7 +79,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'refresh token' })
   @ApiResponse({ status: 200 })
-  @Get('/refresh')
+  @Post('/refresh')
   async refresh(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,

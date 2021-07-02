@@ -5,13 +5,16 @@ curl -i -X POST http://localhost:5000/roles -H 'Content-Type: application/json' 
 curl -i -X POST http://localhost:5000/roles -H 'Content-Type: application/json' -d '{"value": "USER", "description": "regular user"}'
 
 // sign-up
-curl -i -X POST http://localhost:5000/auth/signup -H 'Content-Type: application/json' -d '{"email": "ozov8@ukr.net", "password": "1234567", "first_name": "john", "last_name": "smith"}'
+curl -i -X POST http://localhost:5000/auth/signup -H 'Content-Type: application/json' -d '{"email": "uu@ukr.net", "password": "1234567", "first_name": "john", "last_name": "smith"}'
 
 // sign-in
-curl -i -X POST http://localhost:5000/auth/signin -H 'Content-Type: application/json' -d '{"email": "ozov@ukr.net", "password": "1234567"}'
-
-// activate
-curl -i -X GET http://localhost:5000/auth/activate/f1bcbc60-115e-4144-9292-17180f193050
+curl -i -X POST http://localhost:5000/auth/signin -H 'Content-Type: application/json' -d '{"email": "ozov41@ukr.net", "password": "1234567"}'
 
 // sign-out
-curl -i -X POST http://localhost:5000/auth/signout -H 'Content-Type: application/json' -d '{"email": "ozov@ukr.net", "password": "1234567"}' -b "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96b3ZAdWtyLm5ldCIsImlkIjo0LCJyb2xlcyI6W3siaWQiOjIsInZhbHVlIjoiVVNFUiIsImRlc2NyaXB0aW9uIjoicmVndWxhciB1c2VyIiwiY3JlYXRlZEF0IjoiMjAyMS0wNi0yOVQwMDoxOTo1MS42NDVaIiwidXBkYXRlZEF0IjoiMjAyMS0wNi0yOVQwMDoxOTo1MS42NDVaIiwiVXNlclJvbGVzIjp7ImlkIjo0LCJyb2xlSWQiOjIsInVzZXJJZCI6NH19XSwiaWF0IjoxNjI0OTMxMjUxLCJleHAiOjE2Mjc1MjMyNTF9.uq0HzV"
+curl -i -X POST http://localhost:5000/auth/signout -b "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96b3Y0MUB1a3IubmV0IiwiaWQiOjEwLCJyb2xlcyI6W3siaWQiOjIsInZhbHVlIjoiVVNFUiIsImRlc2NyaXB0aW9uIjoicmVndWxhciB1c2VyIiwiY3JlYXRlZEF0IjoiMjAyMS0wNi0yOVQwMDoxOTo1MS42NDVaIiwidXBkYXRlZEF0IjoiMjAyMS0wNi0yOVQwMDoxOTo1MS42NDVaIiwiVXNlclJvbGVzTW9kZWwiOnsiaWQiOjEwLCJyb2xlSWQiOjIsInVzZXJJZCI6MTB9fV0sImlhdCI6MTYyNTIyNjEzNCwiZXhwIjoxNjI3ODE4MTM0fQ.oflh-I3fSDTU2RloPFCWh8gsEUiwTDukC7wVqvy1Wmw"
+
+// activate
+curl -i -X GET http://localhost:5000/auth/activate/a43b83ad-6ea4-4f0e-b3a5-30de9d611023
+
+// refresh
+curl -i -X POST http://localhost:5000/auth/refresh -b "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96b3Y0MUB1a3IubmV0IiwiaWQiOjEwLCJyb2xlcyI6W3siaWQiOjIsInZhbHVlIjoiVVNFUiIsImRlc2NyaXB0aW9uIjoicmVndWxhciB1c2VyIiwiY3JlYXRlZEF0IjoiMjAyMS0wNi0yOVQwMDoxOTo1MS42NDVaIiwidXBkYXRlZEF0IjoiMjAyMS0wNi0yOVQwMDoxOTo1MS42NDVaIiwiVXNlclJvbGVzTW9kZWwiOnsiaWQiOjEwLCJyb2xlSWQiOjIsInVzZXJJZCI6MTB9fV0sImlhdCI6MTYyNTIyNjEzNCwiZXhwIjoxNjI3ODE4MTM0fQ.oflh-I3fSDTU2RloPFCWh8gsEUiwTDukC7wVqvy1Wmw"

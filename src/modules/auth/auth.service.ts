@@ -39,7 +39,7 @@ export class AuthService {
       `${process.env.API_URL}/auth/activate/${activationLink}`,
     );
 
-    return this.getResponseWithTokens(user);
+    return this.createResponseWithTokens(user);
   }
 
   async signin(userDto: SignInDto) {
@@ -62,7 +62,7 @@ export class AuthService {
       );
     }
 
-    return this.getResponseWithTokens(user);
+    return this.createResponseWithTokens(user);
   }
 
   async signout(refresh_token: string) {
@@ -89,10 +89,10 @@ export class AuthService {
       );
     }
     const user = await this.userService.findById(userData.id);
-    return await this.getResponseWithTokens(user);
+    return await this.createResponseWithTokens(user);
   }
 
-  private async getResponseWithTokens(user: User) {
+  private async createResponseWithTokens(user: User) {
     const payloadForTokens = {
       email: user.email,
       id: user.id,

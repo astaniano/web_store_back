@@ -13,7 +13,7 @@ interface TokenCreationAttrs {
   user_id: number;
 }
 
-@Table({ tableName: 'tokens' })
+@Table({ tableName: 'tokens', timestamps: false })
 export class Token extends Model<Token, TokenCreationAttrs> {
   @ApiProperty({ example: '1', description: 'unique identifier' })
   @Column({

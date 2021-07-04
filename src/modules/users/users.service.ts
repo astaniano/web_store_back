@@ -26,9 +26,9 @@ export class UsersService {
     });
   }
 
-  async getUserByActivationLink(activationLink: string) {
+  async getUserByActivationLink(activation_link: string) {
     return await this.userModel.findOne({
-      where: { activationLink },
+      where: { activation_link },
     });
   }
 

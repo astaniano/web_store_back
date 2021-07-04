@@ -31,12 +31,12 @@ export class AuthService {
     const user = await this.userService.createUser(<User>{
       ...signUpDto,
       password: hashedPassword,
-      activationLink,
+      activation_link: activationLink,
     });
 
     await this.mailService.sendActivationMail(
       signUpDto.email,
-      `${process.env.API_URL}/auth/activate/${activationLink}`,
+      `${process.env.SERVER_URL}/auth/activate/${activationLink}`,
     );
 
     return this.createResponseWithTokens(user);
@@ -75,7 +75,7 @@ export class AuthService {
       throw new HttpException('wrong activation link', HttpStatus.BAD_REQUEST);
     }
 
-    user.isActivated = true;
+    user.is_activated = true;
     await user.save();
   }
 

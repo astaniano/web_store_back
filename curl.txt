@@ -1,9 +1,3 @@
-// create roles:
-//admin
-curl -i -X POST http://localhost:5000/roles -H 'Content-Type: application/json' -d '{"value": "ADMIN", "description": "main user"}'
-//user
-curl -i -X POST http://localhost:5000/roles -H 'Content-Type: application/json' -d '{"value": "USER", "description": "regular user"}'
-
 // sign-up
 curl -i -X POST http://localhost:5000/auth/signup -H 'Content-Type: application/json' -d '{"email": "uu@ukr.net", "password": "1234567", "first_name": "john", "last_name": "smith"}'
 

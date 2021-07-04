@@ -18,11 +18,12 @@ interface UserCreationAttrs {
   last_name: string;
 }
 
-@Table({ tableName: 'users' })
+@Table({ tableName: 'users', timestamps: false })
 export class User extends Model<User, UserCreationAttrs> {
   @ApiProperty({ example: '1', description: 'unique identifier' })
   @Column({
     type: DataType.INTEGER,
+    allowNull: false,
     unique: true,
     autoIncrement: true,
     primaryKey: true,
@@ -46,10 +47,10 @@ export class User extends Model<User, UserCreationAttrs> {
   last_name: string;
 
   @Column({ type: DataType.BOOLEAN, defaultValue: false })
-  isActivated: boolean;
+  is_activated: boolean;
 
   @Column({ type: DataType.STRING })
-  activationLink: string;
+  activation_link: string;
 
   @HasOne(() => Token)
   token: Token;

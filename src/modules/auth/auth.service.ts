@@ -34,10 +34,10 @@ export class AuthService {
       activation_link: activationLink,
     });
 
-    await this.mailService.sendActivationMail(
-      signUpDto.email,
-      `${process.env.SERVER_URL}/auth/activate/${activationLink}`,
-    );
+    // await this.mailService.sendActivationMail(
+    //   signUpDto.email,
+    //   `${process.env.SERVER_URL}/auth/activate/${activationLink}`,
+    // );
 
     return this.createResponseWithTokens(user);
   }

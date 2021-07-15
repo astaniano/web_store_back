@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { SignUpDto } from 'src/modules/auth/dto/sign-up.dto';
-import { UsersService } from 'src/modules/users/users.service';
 import * as bcrypt from 'bcryptjs';
-import { User } from 'src/modules/users/users.model';
 import { v4 as uuidv4 } from 'uuid';
 import { MailService } from '../common/mailer/mail.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { TokenService } from './token/token.service';
+import { UsersService } from '../users/users.service';
+import { User } from '../users/users.model';
+import { SignUpDto } from './dto/sign-up.dto';
 
 @Injectable()
 export class AuthService {

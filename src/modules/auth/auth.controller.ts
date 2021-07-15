@@ -12,11 +12,11 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { SignUpDto } from 'src/modules/auth/dto/sign-up.dto';
 import { AuthService } from './auth.service';
 import { Response, Request } from 'express';
 import { ValidationPipe } from '../../pipes/validation.pipe';
 import { SignInDto } from './dto/sign-in.dto';
+import { SignUpDto } from './dto/sign-up.dto';
 
 @ApiTags('Authorization')
 @Controller('auth')

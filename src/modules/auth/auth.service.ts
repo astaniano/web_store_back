@@ -5,7 +5,7 @@ import { MailService } from '../common/mailer/mail.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { TokenService } from './token/token.service';
 import { UsersService } from '../users/users.service';
-import { User } from '../users/users.model';
+import { User } from '../users/users.entity';
 import { SignUpDto } from './dto/sign-up.dto';
 
 @Injectable()

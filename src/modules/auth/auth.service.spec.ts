@@ -4,11 +4,11 @@ import { forwardRef } from '@nestjs/common';
 import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Token } from './token/token.model';
-import { User } from '../users/users.model';
+import { Token } from './token/token.entity';
+import { User } from '../users/users.entity';
 import { CommonModule } from '../common/common.module';
 import { TokenService } from './token/token.service';
-import { Role } from '../roles/roles.model';
+import { Role } from '../roles/roles.entity';
 import { UserRolesModel } from '../roles/user-roles.model';
 
 describe('AuthService', () => {

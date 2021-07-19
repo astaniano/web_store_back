@@ -1,4 +1,4 @@
-import { Role } from '../../roles/roles.model';
+import { Role } from '../../roles/roles.entity';
 
 export class tokenPayloadDto {
   email: string;

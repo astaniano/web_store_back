@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Token } from './token.model';
+import { Token } from './token.entity';
 import { JwtService } from '@nestjs/jwt';
 import { tokenPayloadDto } from '../dto/token-payload.dto';
 

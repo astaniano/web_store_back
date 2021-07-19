@@ -1,10 +1,10 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersController } from './users.controller';
-import { User } from './users.model';
+import { User } from './users.entity';
 import { UsersService } from './users.service';
-import { Token } from '../auth/token/token.model';
-import { Role } from '../roles/roles.model';
+import { Token } from '../auth/token/token.entity';
+import { Role } from '../roles/roles.entity';
 import { UserRolesModel } from '../roles/user-roles.model';
 import { RolesModule } from '../roles/roles.module';
 import { AuthModule } from '../auth/auth.module';
@@ -13,7 +13,7 @@ import { AuthModule } from '../auth/auth.module';
   controllers: [UsersController],
   providers: [UsersService],
   imports: [
-    SequelizeModule.forFeature([User, Role, UserRolesModel, Token]),
+    TypeOrmModule.forFeature([User, Role, UserRolesModel, Token]),
     RolesModule,
     forwardRef(() => AuthModule),
   ],

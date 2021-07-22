@@ -1,5 +1,5 @@
 allow gmail for less secure apps: https://myaccount.google.com/lesssecureapps  
 
-npx sequelize-cli db:create  
-npx sequelize-cli db:migrate  
-npx sequelize-cli db:seed:all  
+in order to start the project please do the following:
+create database web_store; (in postgres)
+npm run db:migrate

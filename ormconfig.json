@@ -1,0 +1,13 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "postgres",
+  "password": "root",
+  "database": "web_store",
+  "migrationsTableName": "migration_logs",
+  "migrations": ["./src/db_migration/*.ts"],
+  "cli": {
+    "migrationsDir": "./src/db_migration"
+  }
+}

@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
-import { Role } from '../roles/roles.entity';
-import { UserRolesModel } from '../roles/user-roles.model';
-import { Token } from '../auth/token/token.entity';
+// import { Role } from '../roles/roles.entity';
+// import { UserRolesModel } from '../roles/user-roles.model';
+// import { Token } from '../auth/token/token.entity';
 
 // interface UserCreationAttrs {
 //   email: string;
@@ -39,9 +39,9 @@ export class User {
   @Column({ type: 'varchar', length: 300 })
   activationLink: string;
 
-  @OneToOne(() => Token, (token) => token.user)
-  token: Token;
+  // @OneToOne(() => Token, (token) => token.user)
+  // token: Token;
 
-  @BelongsToMany(() => Role, () => UserRolesModel)
-  roles: Role[];
+  // @BelongsToMany(() => Role, () => UserRolesModel)
+  // roles: Role[];
 }

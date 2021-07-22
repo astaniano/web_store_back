@@ -23,7 +23,7 @@ export class Token {
   @Column({ type: 'varchar', length: 450 })
   refreshToken: string;
 
-  @OneToOne(() => User, (user) => user.token)
-  @JoinColumn()
-  user: User;
+  // @OneToOne(() => User, (user) => user.token)
+  // @JoinColumn()
+  // user: User;
 }

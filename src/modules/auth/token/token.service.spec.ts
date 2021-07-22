@@ -4,8 +4,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Token } from './token.entity';
 import { User } from '../../users/users.entity';
-import { Role } from '../../roles/roles.entity';
-import { UserRolesModel } from '../../roles/user-roles.model';
+// import { Role } from '../../roles/roles.entity';
+// import { UserRolesModel } from '../../roles/user-roles.model';
 
 describe('TokenService', () => {
   let service: TokenService;

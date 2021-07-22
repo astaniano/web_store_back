@@ -1,7 +1,7 @@
-import { Role } from '../../roles/roles.entity';
+// import { Role } from '../../roles/roles.entity';
 
 export class tokenPayloadDto {
   email: string;
   id: number;
-  roles: Role[];
+  // roles: Role[];
 }

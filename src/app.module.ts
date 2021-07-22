@@ -4,8 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './modules/users/users.entity';
 import { UsersModule } from './modules/users/users.module';
 import { RolesModule } from './modules/roles/roles.module';
-import { Role } from './modules/roles/roles.entity';
-import { UserRolesModel } from './modules/roles/user-roles.model';
+// import { Role } from './modules/roles/roles.entity';
+// import { UserRolesModel } from './modules/roles/user-roles.model';
 import { AuthModule } from './modules/auth/auth.module';
 import { FilesModule } from './modules/files/files.module';
 import { Token } from './modules/auth/token/token.entity';
@@ -25,14 +25,15 @@ import { CommonModule } from './modules/common/common.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [User, Role, UserRolesModel, Token],
+      // entities: [User, Role, UserRolesModel, Token],
+      entities: [User],
       synchronize: false,
     }),
     UsersModule,
-    RolesModule,
     AuthModule,
-    FilesModule,
-    CommonModule,
+    // RolesModule,
+    // FilesModule,
+    // CommonModule,
   ],
 })
 export class AppModule {}

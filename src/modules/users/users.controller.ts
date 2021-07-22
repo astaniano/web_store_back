@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, UsePipes } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GrantRoleDto } from './dto/grant-role.dto';
 import { UsersService } from './users.service';
@@ -19,5 +19,10 @@ export class UsersController {
   @Post('/role')
   grantRole(@Body() dto: GrantRoleDto) {
     return this.usersService.grantRole(dto);
+  }
+
+  @Get()
+  test() {
+    return "test successful";
   }
 }

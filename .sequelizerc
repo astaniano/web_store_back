@@ -1,9 +1,0 @@
-const path = require('path');
-const pathToEnvFile = path.resolve('src/../', '.development.env');
-require('dotenv').config({ path: pathToEnvFile });
-
-module.exports = {
-   'seeders-path': path.resolve('src/database/', 'seeders'),
-   'migrations-path': path.resolve('src/database', 'migrations'),
-   'config': path.resolve('src/database/config', 'config.ts'),
-}

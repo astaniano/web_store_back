@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
-// import { Role } from './roles.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { Role } from './roles.entity';
 
 @Injectable()
 export class RolesService {
-  // constructor(@InjectModel(Role) private roleModel: typeof Role) {}
-  constructor() {}
+  constructor(@InjectRepository(Role) private roleModel: Repository<Role>) {}
 
   async getRoleByValue(value: string) {
-    // return await this.roleModel.findOne({ where: { value } });
-    return null;
+    return await this.roleModel.find({ where: { value } });
   }
 }

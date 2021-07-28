@@ -1,22 +1,22 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { Token } from './token/token.entity';
-import { User } from '../users/users.entity';
-import { CommonModule } from '../common/common.module';
-import { TokenService } from './token/token.service';
+import { UtilsModule } from '../common/utils.module';
 import { UsersModule } from '../users/users.module';
+import { TokenModule } from './token/token.module';
+import { RolesGuard } from './roles.guard';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, TokenService],
+  providers: [AuthService],
   imports: [
     forwardRef(() => UsersModule),
     JwtModule.register({}),
-    // SequelizeModule.forFeature([Token, User]),
-    CommonModule,
+    UtilsModule,
+    TokenModule,
   ],
-  exports: [AuthService, JwtModule],
+  exports: [AuthService],
 })
 export class AuthModule {}

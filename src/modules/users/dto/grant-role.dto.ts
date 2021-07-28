@@ -14,5 +14,5 @@ export class GrantRoleDto {
     description: 'id of the user who will be granted with this role',
   })
   @IsNumber({}, { message: 'must be a number' })
-  readonly userId: number;
+  readonly user_id: number;
 }

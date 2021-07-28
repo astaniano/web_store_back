@@ -2,7 +2,7 @@
 curl -i -X POST http://localhost:5000/auth/signup -H 'Content-Type: application/json' -d '{"email": "uu@ukr.net", "password": "1234567", "first_name": "john", "last_name": "smith"}'
 
 // sign-in
-curl -i -X POST http://localhost:5000/auth/signin -H 'Content-Type: application/json' -d '{"email": "ozov41@ukr.net", "password": "1234567"}'
+curl -i -X POST http://localhost:5000/auth/signin -H 'Content-Type: application/json' -d '{"email": "uu@ukr.net", "password": "1234567"}'
 
 // sign-out
 curl -i -X POST http://localhost:5000/auth/signout -b "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im96b3Y0MUB1a3IubmV0IiwiaWQiOjEwLCJyb2xlcyI6W3siaWQiOjIsInZhbHVlIjoiVVNFUiIsImRlc2NyaXB0aW9uIjoicmVndWxhciB1c2VyIiwiY3JlYXRlZEF0IjoiMjAyMS0wNi0yOVQwMDoxOTo1MS42NDVaIiwidXBkYXRlZEF0IjoiMjAyMS0wNi0yOVQwMDoxOTo1MS42NDVaIiwiVXNlclJvbGVzTW9kZWwiOnsiaWQiOjEwLCJyb2xlSWQiOjIsInVzZXJJZCI6MTB9fV0sImlhdCI6MTYyNTIyNjEzNCwiZXhwIjoxNjI3ODE4MTM0fQ.oflh-I3fSDTU2RloPFCWh8gsEUiwTDukC7wVqvy1Wmw"

@@ -1,39 +1,42 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GrantRoleDto } from './dto/grant-role.dto';
 import { Repository } from 'typeorm';
+
+import { GrantRoleDto } from './dto/grant-role.dto';
 import { User } from './users.entity';
 import { RolesService } from '../roles/roles.service';
+import { UserToRoles } from '../roles/user-roles.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepo: Repository<User>,
-    // private roleService: RolesService,
+    private roleService: RolesService,
   ) {}
 
   async createUser(userToCreate: User) {
-    const createdUser = await this.userRepo.save(userToCreate);
-    // const role = await this.roleService.getRoleByValue('USER');
-    // await createdUser.$set('roles', [role.id]);
-    // createdUser.roles = [role];
-    return createdUser;
+    const [role] = await this.roleService.getRoleByValue('USER');
+    const userToRoles = new UserToRoles();
+    userToRoles.user_id = userToCreate.id;
+    userToRoles.role_id = role.id;
+
+    userToCreate.userToRoles = [userToRoles];
+    return await this.userRepo.save(userToCreate);
   }
 
   async getUserByEmail(email: string) {
-    // return await this.userRepo.findOne({
-    //   where: { email },
-    //   include: { all: true },
-    // });
-    return null;
+    return await this.userRepo.find({
+      where: { email },
+      // relations: ['userToRoles', 'userToRoles.role'], // works but is not needed
+    });
   }
 
-  async getUserByActivationLink(activation_link: string) {
-    // return await this.userRepo.findOne({
-    //   where: { activation_link },
-    // });
-    return null;
-  }
+  // async getUserByActivationLink(activation_link: string) {
+  //   // return await this.userRepo.findOne({
+  //   //   where: { activation_link },
+  //   // });
+  //   return null;
+  // }
 
   async findById(user_id: number) {
     // return await this.userRepo.findByPk(user_id);

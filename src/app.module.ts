@@ -4,12 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './modules/users/users.entity';
 import { UsersModule } from './modules/users/users.module';
 import { RolesModule } from './modules/roles/roles.module';
-// import { Role } from './modules/roles/roles.entity';
-// import { UserRolesModel } from './modules/roles/user-roles.model';
 import { AuthModule } from './modules/auth/auth.module';
 import { FilesModule } from './modules/files/files.module';
+import { UtilsModule } from './modules/common/utils.module';
+import { Role } from './modules/roles/roles.entity';
+import { UserToRoles } from './modules/roles/user-roles.entity';
 import { Token } from './modules/auth/token/token.entity';
-import { CommonModule } from './modules/common/common.module';
 
 @Module({
   controllers: [],
@@ -25,15 +25,15 @@ import { CommonModule } from './modules/common/common.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRES_DB,
-      // entities: [User, Role, UserRolesModel, Token],
-      entities: [User],
+      entities: [User, Role, UserToRoles, Token],
       synchronize: false,
+      logging: true,
     }),
     UsersModule,
     AuthModule,
-    // RolesModule,
-    // FilesModule,
-    // CommonModule,
+    RolesModule,
+    FilesModule,
+    UtilsModule,
   ],
 })
 export class AppModule {}

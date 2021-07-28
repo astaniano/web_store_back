@@ -1,15 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
-// import { Role } from '../roles/roles.entity';
-// import { UserRolesModel } from '../roles/user-roles.model';
-// import { Token } from '../auth/token/token.entity';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  OneToMany,
+} from 'typeorm';
 
-// interface UserCreationAttrs {
-//   email: string;
-//   password: string;
-//   first_name: string;
-//   last_name: string;
-// }
+import { Token } from '../auth/token/token.entity';
+import { UserToRoles } from '../roles/user-roles.entity';
 
 @Entity('users')
 export class User {
@@ -27,21 +26,23 @@ export class User {
 
   @ApiProperty({ example: 'john', description: 'first name' })
   @Column({ type: 'varchar', length: 100 })
-  firstName: string;
+  first_name: string;
 
   @ApiProperty({ example: 'smith', description: 'last name' })
   @Column({ type: 'varchar', length: 100 })
-  lastName: string;
+  last_name: string;
 
   @Column({ type: 'boolean', default: false })
-  isActivated: boolean;
+  is_activated: boolean;
 
   @Column({ type: 'varchar', length: 300 })
-  activationLink: string;
+  activation_link: string;
 
-  // @OneToOne(() => Token, (token) => token.user)
-  // token: Token;
+  @OneToOne(() => Token, (token: Token) => token.user)
+  token: Token;
 
-  // @BelongsToMany(() => Role, () => UserRolesModel)
-  // roles: Role[];
+  @OneToMany(() => UserToRoles, (userToRoles) => userToRoles.user, {
+    cascade: true,
+  })
+  public userToRoles: UserToRoles[];
 }

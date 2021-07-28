@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
+
 import { MailService } from '../common/mailer/mail.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { TokenService } from './token/token.service';
@@ -12,13 +13,13 @@ import { SignUpDto } from './dto/sign-up.dto';
 export class AuthService {
   constructor(
     private userService: UsersService,
-    // private mailService: MailService,
-    // private tokenService: TokenService,
+    private mailService: MailService,
+    private tokenService: TokenService,
   ) {}
 
   async signup(signUpDto: SignUpDto) {
     const candidate = await this.userService.getUserByEmail(signUpDto.email);
-    if (candidate) {
+    if (candidate.length > 0) {
       throw new HttpException(
         'User with such email already exists',
         HttpStatus.BAD_REQUEST,
@@ -26,46 +27,45 @@ export class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(signUpDto.password, 5);
-    const activationLink = uuidv4(); // e.g. v34fa-asfasf-142saf-sa-asf
+    const activation_link = uuidv4(); // e.g. v34fa-asfasf-142saf-sa-asf
 
     const user = await this.userService.createUser(<User>{
       ...signUpDto,
       password: hashedPassword,
-      activationLink: activationLink,
+      activation_link,
     });
 
     // await this.mailService.sendActivationMail(
     //   signUpDto.email,
-    //   `${process.env.SERVER_URL}/auth/activate/${activationLink}`,
+    //   `${process.env.SERVER_URL}/auth/activate/${activation_link}`,
     // );
 
-    // return this.createResponseWithTokens(user);
-    return null;
+    return this.createResponseWithTokens(user);
   }
 
-  // async signin(userDto: SignInDto) {
-  //   const user = await this.userService.getUserByEmail(userDto.email);
-  //   if (!user) {
-  //     throw new HttpException(
-  //       'wrong email or password',
-  //       HttpStatus.BAD_REQUEST,
-  //     );
-  //   }
-  //
-  //   const isPasswordEqual = await bcrypt.compare(
-  //     userDto.password,
-  //     user.password,
-  //   );
-  //   if (!isPasswordEqual) {
-  //     throw new HttpException(
-  //       'wrong email or password',
-  //       HttpStatus.BAD_REQUEST,
-  //     );
-  //   }
-  //
-  //   return this.createResponseWithTokens(user);
-  // }
-  //
+  async signin(userDto: SignInDto) {
+    const [user] = await this.userService.getUserByEmail(userDto.email);
+    if (!user) {
+      throw new HttpException(
+        'wrong email or password',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const isPasswordEqual = await bcrypt.compare(
+      userDto.password,
+      user.password,
+    );
+    if (!isPasswordEqual) {
+      throw new HttpException(
+        'wrong email or password',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.createResponseWithTokens(user);
+  }
+
   // async signout(refresh_token: string) {
   //   return this.tokenService.deleteRefreshToken(refresh_token);
   // }
@@ -92,17 +92,16 @@ export class AuthService {
   //   const user = await this.userService.findById(userData.id);
   //   return await this.createResponseWithTokens(user);
   // }
-  //
-  // private async createResponseWithTokens(user: User) {
-  //   const payloadForTokens = {
-  //     email: user.email,
-  //     id: user.id,
-  //     roles: user.roles,
-  //   };
-  //
-  //   const tokens = await this.tokenService.generateTokens(payloadForTokens);
-  //   await this.tokenService.saveRefreshToken(user.id, tokens.refreshToken);
-  //   user.password = '';
-  //   return { ...tokens, user };
-  // }
+
+  private async createResponseWithTokens(user: User) {
+    const payloadForTokens = {
+      email: user.email,
+      id: user.id,
+    };
+
+    const tokens = await this.tokenService.generateTokens(payloadForTokens);
+    await this.tokenService.saveRefreshToken(user.id, tokens.refreshToken);
+    user.password = '';
+    return { ...tokens, user };
+  }
 }

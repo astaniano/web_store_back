@@ -2,41 +2,46 @@ import { Injectable } from '@nestjs/common';
 import { Token } from './token.entity';
 import { JwtService } from '@nestjs/jwt';
 import { tokenPayloadDto } from '../dto/token-payload.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TokenService {
   constructor(
-    // @InjectModel(Token) private tokenModel: typeof Token,
+    @InjectRepository(Token) private tokenRepo: Repository<Token>,
     private jwtService: JwtService,
   ) {}
 
-  // async generateTokens(payload: tokenPayloadDto) {
-  //   const accessToken = this.jwtService.sign(payload, {
-  //     expiresIn: '30m',
-  //     secret: process.env.JWT_ACCESS_SECRET,
-  //   });
-  //   const refreshToken = this.jwtService.sign(payload, {
-  //     expiresIn: '30d',
-  //     secret: process.env.JWT_REFRESH_SECRET,
-  //   });
+  async generateTokens(payload: tokenPayloadDto) {
+    const accessToken = this.jwtService.sign(payload, {
+      expiresIn: '30m',
+      secret: process.env.JWT_ACCESS_SECRET,
+    });
+    const refreshToken = this.jwtService.sign(payload, {
+      expiresIn: '30d',
+      secret: process.env.JWT_REFRESH_SECRET,
+    });
 
-  //   return {
-  //     accessToken,
-  //     refreshToken,
-  //   };
-  // }
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
 
-  // async saveRefreshToken(user_id: number, refresh_token: string) {
-  //   const tokenData = await this.tokenModel.findOne({ where: { user_id } });
-  //   if (tokenData) {
-  //     tokenData.refresh_token = refresh_token;
-  //     return tokenData.save();
-  //   }
-  //   return await this.tokenModel.create({
-  //     refresh_token,
-  //     user_id,
-  //   });
-  // }
+  async saveRefreshToken(user_id: number, refresh_token: string) {
+    const [token] = await this.tokenRepo.find({ where: { user_id } });
+    if (token) {
+      // we update the record that already exists
+      token.refresh_token = refresh_token;
+      return await this.tokenRepo.save(token);
+    }
+
+    // create a new record
+    return await this.tokenRepo.save({
+      refresh_token,
+      user_id,
+    });
+  }
 
   // async deleteRefreshToken(refresh_token: string) {
   //   return await this.tokenModel.destroy({

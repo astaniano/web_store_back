@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, UseGuards, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  UsePipes,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GrantRoleDto } from './dto/grant-role.dto';
 import { UsersService } from './users.service';
@@ -14,7 +21,7 @@ export class UsersController {
   @ApiOperation({ summary: 'grant a role' })
   @ApiResponse({ status: 200 })
   @Roles('ADMIN')
-  @UseGuards(RolesGuard)
+  // @UseGuards(RolesGuard)
   @UsePipes(ValidationPipe)
   @Post('/role')
   grantRole(@Body() dto: GrantRoleDto) {
@@ -23,6 +30,6 @@ export class UsersController {
 
   @Get()
   test() {
-    return "test successful";
+    return 'test successful';
   }
 }

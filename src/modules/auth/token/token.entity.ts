@@ -21,9 +21,13 @@ export class Token {
 
   @ApiProperty({ example: 'fasdiofjsaf', description: 'refresh token' })
   @Column({ type: 'varchar', length: 450 })
-  refreshToken: string;
+  refresh_token: string;
 
-  // @OneToOne(() => User, (user) => user.token)
-  // @JoinColumn()
-  // user: User;
+  @ApiProperty({ example: '1', description: 'id of the user' })
+  @Column({ name: 'user_id' })
+  user_id: number;
+
+  @OneToOne(() => User, (user: User) => user.token)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }

@@ -29,7 +29,7 @@ export class TokenService {
   }
 
   async saveRefreshToken(user_id: number, refresh_token: string) {
-    const [token] = await this.tokenRepo.find({ where: { user_id } });
+    const token = await this.tokenRepo.findOne({ where: { user_id } });
     if (token) {
       // we update the record that already exists
       token.refresh_token = refresh_token;
@@ -43,11 +43,9 @@ export class TokenService {
     });
   }
 
-  // async deleteRefreshToken(refresh_token: string) {
-  //   return await this.tokenModel.destroy({
-  //     where: { refresh_token },
-  //   });
-  // }
+  async deleteRefreshToken(refresh_token: string) {
+    return await this.tokenRepo.delete({ refresh_token });
+  }
 
   // validateRefreshToken(refresh_token: string) {
   //   return this.jwtService.verify(refresh_token, {

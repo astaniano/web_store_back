@@ -13,7 +13,7 @@ export class createUserRoles1626928377955 implements MigrationInterface {
                 CONSTRAINT fk_roles
                     FOREIGN KEY(role_id)
                     REFERENCES roles(id)
-                    ON DELETE CASCADE   
+                    ON DELETE CASCADE  
           );`);
   }
 

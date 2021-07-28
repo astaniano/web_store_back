@@ -56,18 +56,18 @@ export class AuthController {
     return userData;
   }
 
-  // @ApiOperation({ summary: 'sign-out the user' })
-  // @ApiResponse({ status: 200 })
-  // @Post('/signout')
-  // async sigout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-  //   const { refreshToken } = req.cookies;
-  //   const tokenData = await this.authService.signout(refreshToken);
-  //   res.clearCookie('refreshToken');
-  //   return tokenData;
-  // }
+  @ApiOperation({ summary: 'sign-out the user' })
+  @ApiResponse({ status: 200 })
+  @Post('/signout')
+  async sigout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    const { refreshToken } = req.cookies;
+    const tokenData = await this.authService.signout(refreshToken);
+    res.clearCookie('refreshToken');
+    return tokenData;
+  }
 
   @ApiOperation({ summary: "confirm user's email" })
-  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 301 })
   @Get('/activate/:link')
   @Redirect()
   async activate(@Param('link') link: string) {
@@ -78,25 +78,25 @@ export class AuthController {
     };
   }
 
-  // @ApiOperation({ summary: 'refresh token' })
-  // @ApiResponse({ status: 200 })
-  // @Post('/refresh')
-  // async refresh(
-  //   @Req() req: Request,
-  //   @Res({ passthrough: true }) res: Response,
-  // ) {
-  //   const { refreshToken } = req.cookies;
-  //   if (!refreshToken) {
-  //     throw new HttpException(
-  //       'refresh token was not provided',
-  //       HttpStatus.BAD_REQUEST,
-  //     );
-  //   }
-  //   const userData = await this.authService.refresh(refreshToken);
-  //   res.cookie('refreshToken', userData.refreshToken, {
-  //     maxAge: 30 * 24 * 60 * 60 * 1000,
-  //     httpOnly: true,
-  //   });
-  //   return userData;
-  // }
+  @ApiOperation({ summary: 'refresh token' })
+  @ApiResponse({ status: 200 })
+  @Post('/refresh')
+  async refresh(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { refreshToken } = req.cookies;
+    if (!refreshToken) {
+      throw new HttpException(
+        'refresh token was not provided',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const userData = await this.authService.refresh(refreshToken);
+    res.cookie('refreshToken', userData.refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
+    return userData;
+  }
 }

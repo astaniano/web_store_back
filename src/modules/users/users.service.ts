@@ -24,23 +24,26 @@ export class UsersService {
     return await this.userRepo.save(userToCreate);
   }
 
-  async getUserByEmail(email: string) {
-    return await this.userRepo.find({
+  async findUserByEmail(email: string) {
+    return await this.userRepo.findOne({
       where: { email },
       // relations: ['userToRoles', 'userToRoles.role'], // works but is not needed
     });
   }
 
-  // async getUserByActivationLink(activation_link: string) {
-  //   // return await this.userRepo.findOne({
-  //   //   where: { activation_link },
-  //   // });
-  //   return null;
-  // }
+  async findUserByActivationLink(activation_link: string) {
+    return await this.userRepo.findOne({
+      where: { activation_link },
+    });
+  }
 
   async findById(user_id: number) {
-    // return await this.userRepo.findByPk(user_id);
+    // return await this.userRepo.findOne(user_id);
     return null;
+  }
+
+  async updateUser(user: User) {
+    return await this.userRepo.save(user);
   }
 
   async grantRole(dto: GrantRoleDto) {

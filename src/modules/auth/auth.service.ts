@@ -35,6 +35,7 @@ export class AuthService {
       activation_link,
     });
 
+    // todo uncomment below for email send
     // await this.mailService.sendActivationMail(
     //   signUpDto.email,
     //   `${process.env.SERVER_URL}/auth/activate/${activation_link}`,
@@ -82,18 +83,18 @@ export class AuthService {
     await this.userService.updateUser(user);
   }
 
-  // async refresh(refresh_token: string) { // todo here
-  //   const userData = this.tokenService.validateRefreshToken(refresh_token);
-  //   const tokenFromDB = await this.tokenService.findRefreshToken(refresh_token);
-  //   if (!userData || !tokenFromDB) {
-  //     throw new HttpException(
-  //       'could not verify refresh token',
-  //       HttpStatus.BAD_REQUEST,
-  //     );
-  //   }
-  //   const user = await this.userService.findById(userData.id);
-  //   return await this.createResponseWithTokens(user);
-  // }
+  async refresh(refresh_token: string) {
+    const userData = this.tokenService.validateRefreshToken(refresh_token);
+    const tokenFromDB = await this.tokenService.findRefreshToken(refresh_token);
+    if (!userData || !tokenFromDB) {
+      throw new HttpException(
+        'could not verify refresh token',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const user = await this.userService.findUserById(userData.id);
+    return await this.generateResponseWithTokens(user);
+  }
 
   private async generateResponseWithTokens(user: User) {
     const payloadForTokens = {

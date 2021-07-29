@@ -9,6 +9,6 @@ export class RolesService {
   constructor(@InjectRepository(Role) private roleModel: Repository<Role>) {}
 
   async getRoleByValue(value: string) {
-    return await this.roleModel.find({ where: { value } });
+    return await this.roleModel.findOne({ where: { value } });
   }
 }

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Token } from './token.entity';
 import { JwtService } from '@nestjs/jwt';
-import { tokenPayloadDto } from '../dto/token-payload.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
+import { Token } from './token.entity';
+import { tokenPayloadDto } from '../dto/token-payload.dto';
 
 @Injectable()
 export class TokenService {
@@ -29,11 +30,11 @@ export class TokenService {
   }
 
   async saveRefreshToken(user_id: number, refresh_token: string) {
-    const token = await this.tokenRepo.findOne({ where: { user_id } });
-    if (token) {
+    const record = await this.tokenRepo.findOne({ where: { user_id } });
+    if (record) {
       // we update the record that already exists
-      token.refresh_token = refresh_token;
-      return await this.tokenRepo.save(token);
+      record.refresh_token = refresh_token;
+      return await this.tokenRepo.save(record);
     }
 
     // create a new record
@@ -47,15 +48,15 @@ export class TokenService {
     return await this.tokenRepo.delete({ refresh_token });
   }
 
-  // validateRefreshToken(refresh_token: string) {
-  //   return this.jwtService.verify(refresh_token, {
-  //     secret: process.env.JWT_REFRESH_SECRET,
-  //   });
-  // }
+  validateRefreshToken(refresh_token: string) {
+    return this.jwtService.verify(refresh_token, {
+      secret: process.env.JWT_REFRESH_SECRET,
+    });
+  }
 
-  // async findRefreshToken(refresh_token: string) {
-  //   return await this.tokenModel.destroy({
-  //     where: { refresh_token },
-  //   });
-  // }
+  async findRefreshToken(refresh_token: string) {
+    return await this.tokenRepo.findOne({
+      where: { refresh_token },
+    });
+  }
 }

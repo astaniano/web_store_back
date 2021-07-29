@@ -15,7 +15,7 @@ export class UsersService {
   ) {}
 
   async createUser(userToCreate: User) {
-    const [role] = await this.roleService.getRoleByValue('USER');
+    const role = await this.roleService.getRoleByValue('USER');
     const userToRoles = new UserToRoles();
     userToRoles.user_id = userToCreate.id;
     userToRoles.role_id = role.id;
@@ -37,9 +37,8 @@ export class UsersService {
     });
   }
 
-  async findById(user_id: number) {
-    // return await this.userRepo.findOne(user_id);
-    return null;
+  async findUserById(user_id: number) {
+    return await this.userRepo.findOne(user_id);
   }
 
   async updateUser(user: User) {

@@ -8,6 +8,7 @@ import { TokenService } from './token/token.service';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/users.entity';
 import { SignUpDto } from './dto/sign-up.dto';
+import { Token } from './token/token.entity';
 
 @Injectable()
 export class AuthService {
@@ -41,7 +42,7 @@ export class AuthService {
     //   `${process.env.SERVER_URL}/auth/activate/${activation_link}`,
     // );
 
-    return this.generateResponseWithTokens(user);
+    return this.generateResponseWithTokens(user, null);
   }
 
   async signin(userDto: SignInDto) {
@@ -64,7 +65,11 @@ export class AuthService {
       );
     }
 
-    return this.generateResponseWithTokens(user);
+    const recordWithToken = await this.tokenService.findRefreshTokenByUserId(
+      user.id,
+    );
+
+    return this.generateResponseWithTokens(user, recordWithToken);
   }
 
   async signout(refresh_token: string) {
@@ -85,25 +90,29 @@ export class AuthService {
 
   async refresh(refresh_token: string) {
     const userData = this.tokenService.validateRefreshToken(refresh_token);
-    const tokenFromDB = await this.tokenService.findRefreshToken(refresh_token);
-    if (!userData || !tokenFromDB) {
+    const recordWithToken = await this.tokenService.findRefreshToken(
+      refresh_token,
+    );
+    if (!userData || !recordWithToken) {
       throw new HttpException(
         'could not verify refresh token',
         HttpStatus.BAD_REQUEST,
       );
     }
     const user = await this.userService.findUserById(userData.id);
-    return await this.generateResponseWithTokens(user);
+    return await this.generateResponseWithTokens(user, recordWithToken);
   }
 
-  private async generateResponseWithTokens(user: User) {
-    const payloadForTokens = {
-      email: user.email,
-      id: user.id,
-    };
+  private async generateResponseWithTokens(user: User, recordWithToken: Token) {
+    const tokens = await this.tokenService.generateTokens(user);
 
-    const tokens = await this.tokenService.generateTokens(payloadForTokens);
-    await this.tokenService.saveRefreshToken(user.id, tokens.refreshToken);
+    if (recordWithToken !== null) {
+      recordWithToken.refresh_token = tokens.refreshToken;
+      await this.tokenService.updateRefreshToken(recordWithToken);
+    } else {
+      await this.tokenService.saveRefreshToken(user.id, tokens.refreshToken);
+    }
+
     user.password = '';
     return { ...tokens, user };
   }

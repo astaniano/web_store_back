@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Token } from './token.entity';
-import { tokenPayloadDto } from '../dto/token-payload.dto';
+import { User } from '../../users/users.entity';
 
 @Injectable()
 export class TokenService {
@@ -13,7 +13,12 @@ export class TokenService {
     private jwtService: JwtService,
   ) {}
 
-  async generateTokens(payload: tokenPayloadDto) {
+  async generateTokens(user: User) {
+    const payload = {
+      email: user.email,
+      id: user.id,
+    };
+
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: '30m',
       secret: process.env.JWT_ACCESS_SECRET,
@@ -30,18 +35,11 @@ export class TokenService {
   }
 
   async saveRefreshToken(user_id: number, refresh_token: string) {
-    const record = await this.tokenRepo.findOne({ where: { user_id } });
-    if (record) {
-      // we update the record that already exists
-      record.refresh_token = refresh_token;
-      return await this.tokenRepo.save(record);
-    }
+    return await this.tokenRepo.save({ refresh_token, user_id });
+  }
 
-    // create a new record
-    return await this.tokenRepo.save({
-      refresh_token,
-      user_id,
-    });
+  async updateRefreshToken(token: Token) {
+    return await this.tokenRepo.save(token);
   }
 
   async deleteRefreshToken(refresh_token: string) {
@@ -58,5 +56,9 @@ export class TokenService {
     return await this.tokenRepo.findOne({
       where: { refresh_token },
     });
+  }
+
+  async findRefreshTokenByUserId(user_id: number) {
+    return await this.tokenRepo.findOne({ where: { user_id } });
   }
 }

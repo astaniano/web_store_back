@@ -30,19 +30,18 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(signUpDto.password, 5);
     const activation_link = uuidv4(); // e.g. v34fa-asfasf-142saf-sa-asf
 
-    const user = await this.userService.createUser(<User>{
+    await this.userService.createUser(<User>{
       ...signUpDto,
       password: hashedPassword,
       activation_link,
     });
 
-    // todo uncomment below for email send
-    // await this.mailService.sendActivationMail(
-    //   signUpDto.email,
-    //   `${process.env.SERVER_URL}/auth/activate/${activation_link}`,
-    // );
+    await this.mailService.sendActivationMail(
+      signUpDto.email,
+      `${process.env.SERVER_URL}/auth/activate/${activation_link}`,
+    );
 
-    return this.generateResponseWithTokens(user, null);
+    return 'user has been created';
   }
 
   async signin(userDto: SignInDto) {
@@ -65,11 +64,7 @@ export class AuthService {
       );
     }
 
-    const recordWithToken = await this.tokenService.findRefreshTokenByUserId(
-      user.id,
-    );
-
-    return this.generateResponseWithTokens(user, recordWithToken);
+    return this.generateResponseWithTokens(user, null);
   }
 
   async signout(refresh_token: string) {

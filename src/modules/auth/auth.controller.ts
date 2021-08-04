@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpException,
   HttpStatus,
   Param,
@@ -28,16 +29,8 @@ export class AuthController {
   @ApiResponse({ status: 201 })
   @UsePipes(ValidationPipe)
   @Post('/signup')
-  async signup(
-    @Body() signUpDto: SignUpDto,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    const userData = await this.authService.signup(signUpDto);
-    response.cookie('refreshToken', userData.refreshToken, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-    });
-    return userData;
+  async signup(@Body() signUpDto: SignUpDto) {
+    return await this.authService.signup(signUpDto);
   }
 
   @ApiOperation({ summary: 'sign-in the user' })
@@ -53,12 +46,14 @@ export class AuthController {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
     });
+    response.statusCode = HttpStatus.OK;
     return userData;
   }
 
   @ApiOperation({ summary: 'sign-out the user' })
   @ApiResponse({ status: 200 })
   @Post('/signout')
+  @HttpCode(200)
   async sigout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     const { refreshToken } = req.cookies;
     const tokenData = await this.authService.signout(refreshToken);
@@ -81,6 +76,7 @@ export class AuthController {
   @ApiOperation({ summary: 'refresh token' })
   @ApiResponse({ status: 200 })
   @Post('/refresh')
+  @HttpCode(200)
   async refresh(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,

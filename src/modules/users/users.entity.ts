@@ -25,18 +25,18 @@ export class User {
   password: string;
 
   @ApiProperty({ example: 'john', description: 'first name' })
-  @Column({ type: 'varchar', length: 100 })
-  first_name: string;
+  @Column({ name: 'first_name', type: 'varchar', length: 100 })
+  firstName: string;
 
   @ApiProperty({ example: 'smith', description: 'last name' })
-  @Column({ type: 'varchar', length: 100 })
-  last_name: string;
+  @Column({ name: 'last_name', type: 'varchar', length: 100 })
+  lastName: string;
 
-  @Column({ type: 'boolean', default: false })
-  is_activated: boolean;
+  @Column({ name: 'is_activated', type: 'boolean', default: false })
+  isActivated: boolean;
 
-  @Column({ type: 'varchar', length: 300 })
-  activation_link: string;
+  @Column({ name: 'activation_link', type: 'varchar', length: 300 })
+  activationLink: string;
 
   @OneToOne(() => Token, (token: Token) => token.user)
   token: Token;

@@ -28,17 +28,17 @@ export class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(signUpDto.password, 5);
-    const activation_link = uuidv4(); // e.g. v34fa-asfasf-142saf-sa-asf
+    const activationLink = uuidv4(); // e.g. v34fa-asfasf-142saf-sa-asf
 
     await this.userService.createUser(<User>{
       ...signUpDto,
       password: hashedPassword,
-      activation_link,
+      activationLink,
     });
 
     await this.mailService.sendActivationMail(
       signUpDto.email,
-      `${process.env.SERVER_URL}/auth/activate/${activation_link}`,
+      `${process.env.SERVER_URL}/auth/activate/${activationLink}`,
     );
 
     return 'user has been created';
@@ -79,7 +79,7 @@ export class AuthService {
       throw new HttpException('wrong activation link', HttpStatus.BAD_REQUEST);
     }
 
-    user.is_activated = true;
+    user.isActivated = true;
     await this.userService.updateUser(user);
   }
 

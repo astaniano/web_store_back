@@ -19,12 +19,12 @@ export class SignUpDto {
   @Length(4, 20, {
     message: 'can not be less than 4 and not longer than 20 symbols',
   })
-  readonly first_name: string;
+  readonly firstName: string;
 
   @ApiProperty({ example: 'smith', description: 'last name of the user' })
   @IsString({ message: 'must be a string' })
   @Length(4, 20, {
     message: 'can not be less than 4 and not longer than 20 symbols',
   })
-  readonly last_name: string;
+  readonly lastName: string;
 }

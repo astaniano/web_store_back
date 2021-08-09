@@ -36,10 +36,10 @@ export class AuthService {
       activationLink,
     });
 
-    // await this.mailService.sendActivationMail(
-    //   signUpDto.email,
-    //   `${process.env.SERVER_URL}/auth/activate/${activationLink}`,
-    // );
+    await this.mailService.sendActivationMail(
+      signUpDto.email,
+      `${process.env.SERVER_URL}/auth/activate/${activationLink}`,
+    );
 
     return 'user has been created';
   }

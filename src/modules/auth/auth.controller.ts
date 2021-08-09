@@ -23,6 +23,8 @@ import { ValidationPipe } from '../../pipes/validation.pipe';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 
+import * as Jimp from 'jimp';
+
 @ApiTags('Authorization')
 @Controller('auth')
 export class AuthController {
@@ -34,7 +36,7 @@ export class AuthController {
   @UseInterceptors(
     FileInterceptor('userPhoto', {
       limits: { fileSize: 1024 * 1024 },
-      dest: 'user_photos',
+      // dest: 'user_photos',
     }),
   )
   @UsePipes(ValidationPipe)
@@ -42,9 +44,17 @@ export class AuthController {
     @UploadedFile() file: Express.Multer.File,
     @Body() signUpDto: SignUpDto,
   ) {
-    // return await this.authService.signup(signUpDto);
-    console.log(file);
-    console.log(signUpDto);
+    return await this.authService.signup(signUpDto);
+
+    const image = await Jimp.read(file.buffer);
+    const x = image.getHeight() * 0.25;
+    const y = image.getWidth() * 0.25;
+    console.log(x, y);
+    await image.crop(x, y, 200, 200);
+    await image.writeAsync('user_photos/output.png');
+
+    // console.log(file);
+    // console.log(signUpDto);
   }
 
   @ApiOperation({ summary: 'sign-in the user' })

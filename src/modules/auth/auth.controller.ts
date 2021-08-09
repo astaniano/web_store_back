@@ -10,9 +10,12 @@ import {
   Redirect,
   Req,
   Res,
+  UploadedFile,
+  UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Response, Request } from 'express';
 
 import { AuthService } from './auth.service';
@@ -27,10 +30,21 @@ export class AuthController {
 
   @ApiOperation({ summary: 'create new user' })
   @ApiResponse({ status: 201 })
-  @UsePipes(ValidationPipe)
   @Post('/signup')
-  async signup(@Body() signUpDto: SignUpDto) {
-    return await this.authService.signup(signUpDto);
+  @UseInterceptors(
+    FileInterceptor('userPhoto', {
+      limits: { fileSize: 1024 * 1024 },
+      dest: 'user_photos',
+    }),
+  )
+  @UsePipes(ValidationPipe)
+  async signup(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() signUpDto: SignUpDto,
+  ) {
+    // return await this.authService.signup(signUpDto);
+    console.log(file);
+    console.log(signUpDto);
   }
 
   @ApiOperation({ summary: 'sign-in the user' })

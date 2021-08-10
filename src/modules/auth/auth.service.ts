@@ -36,6 +36,7 @@ export class AuthService {
       activationLink,
     });
 
+    // todo uncomment here in order to send email during signup
     // await this.mailService.sendActivationMail(
     //   signUpDto.email,
     //   `${process.env.SERVER_URL}/auth/activate/${activationLink}`,

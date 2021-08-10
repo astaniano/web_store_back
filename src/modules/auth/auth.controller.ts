@@ -47,10 +47,23 @@ export class AuthController {
     return await this.authService.signup(signUpDto);
 
     const image = await Jimp.read(file.buffer);
-    const x = image.getHeight() * 0.25;
-    const y = image.getWidth() * 0.25;
-    console.log(x, y);
-    await image.crop(x, y, 200, 200);
+    const originalHeight = image.getHeight();
+    const originalWidth = image.getWidth();
+
+    let h = originalHeight;
+    let w = originalWidth;
+    let x = 0;
+    let y = 0;
+    if (originalWidth > 200) {
+      x = (originalWidth - 200) / 2;
+      w = 200;
+    }
+    if (originalHeight > 200) {
+      y = (originalHeight - 200) / 2;
+      h = 200;
+    }
+
+    await image.crop(x, y, w, h);
     await image.writeAsync('user_photos/output.png');
 
     // console.log(file);

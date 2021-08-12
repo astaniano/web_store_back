@@ -41,10 +41,10 @@ export class AuthService {
     const image = await this.imageService.cropImage(img, 200, 200);
     await this.imageService.saveImageInFs(
       image,
-      `user_photos/${createdUser.id}`,
+      `src/modules/users/photos/${createdUser.id}`,
     );
 
-    // todo uncomment here in order to send email during signup
+    // todo uncomment here (it works) in order to send email during signup
     // await this.mailService.sendActivationMail(
     //   signUpDto.email,
     //   `${process.env.SERVER_URL}/auth/activate/${activationLink}`,

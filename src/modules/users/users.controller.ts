@@ -28,8 +28,10 @@ export class UsersController {
     return this.usersService.grantRole(dto);
   }
 
+  @ApiOperation({ summary: 'grant a role' })
+  @ApiResponse({ status: 200 })
   @Get()
-  test() {
+  getUserProfile() {
     return 'test successful';
   }
 }

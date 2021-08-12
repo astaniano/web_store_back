@@ -9,16 +9,18 @@ import { UsersService } from '../users/users.service';
 import { User } from '../users/users.entity';
 import { SignUpDto } from './dto/sign-up.dto';
 import { Token } from './token/token.entity';
+import { ImageService } from '../common/image_handler/image.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UsersService,
     private mailService: MailService,
+    private imageService: ImageService,
     private tokenService: TokenService,
   ) {}
 
-  async signup(signUpDto: SignUpDto) {
+  async signup(signUpDto: SignUpDto, img: Buffer) {
     const candidate = await this.userService.findUserByEmail(signUpDto.email);
     if (candidate) {
       throw new HttpException(
@@ -30,11 +32,17 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(signUpDto.password, 5);
     const activationLink = uuidv4(); // e.g. v34fa-asfasf-142saf-sa-asf
 
-    await this.userService.createUser(<User>{
+    const createdUser = await this.userService.createUser(<User>{
       ...signUpDto,
       password: hashedPassword,
       activationLink,
     });
+
+    const image = await this.imageService.cropImage(img, 200, 200);
+    await this.imageService.saveImageInFs(
+      image,
+      `user_photos/${createdUser.id}`,
+    );
 
     // todo uncomment here in order to send email during signup
     // await this.mailService.sendActivationMail(
@@ -42,7 +50,7 @@ export class AuthService {
     //   `${process.env.SERVER_URL}/auth/activate/${activationLink}`,
     // );
 
-    return 'user has been created';
+    return createdUser.id;
   }
 
   async signin(userDto: SignInDto) {

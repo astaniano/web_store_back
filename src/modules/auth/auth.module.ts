@@ -6,7 +6,6 @@ import { AuthService } from './auth.service';
 import { UtilsModule } from '../common/utils.module';
 import { UsersModule } from '../users/users.module';
 import { TokenModule } from './token/token.module';
-import { RolesGuard } from './roles.guard';
 
 @Module({
   controllers: [AuthController],

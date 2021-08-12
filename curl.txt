@@ -1,5 +1,10 @@
 // sign-up
-curl -i -X POST http://localhost:5000/auth/signup -H 'Content-Type: application/json' -d '{"email": "uu@ukr.net", "password": "1234567", "first_name": "john", "last_name": "smith"}'
+curl -i -X POST http://localhost:5000/auth/signup \
+ -F 'email=uu@ukr.net' \
+ -F 'password=1234567' \
+ -F 'firstName=john' \
+ -F 'lastName=smith' \
+ -F 'userPhoto=@/home/alex/Pictures/Screenshot from 2021-08-09 01-53-33.png'
 
 // sign-in
 curl -i -X POST http://localhost:5000/auth/signin -H 'Content-Type: application/json' -d '{"email": "uu@ukr.net", "password": "1234567"}'

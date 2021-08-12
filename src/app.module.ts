@@ -6,7 +6,6 @@ import { User } from './modules/users/users.entity';
 import { UsersModule } from './modules/users/users.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { FilesModule } from './modules/files/files.module';
 import { UtilsModule } from './modules/common/utils.module';
 import { Role } from './modules/roles/roles.entity';
 import { UserToRoles } from './modules/roles/user-roles.entity';
@@ -33,7 +32,6 @@ import { Token } from './modules/auth/token/token.entity';
     UsersModule,
     AuthModule,
     RolesModule,
-    FilesModule,
     UtilsModule,
   ],
 })

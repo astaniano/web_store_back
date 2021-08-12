@@ -16,14 +16,13 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Response, Request } from 'express';
+import { Response, Request, Express } from 'express';
 
 import { AuthService } from './auth.service';
 import { ValidationPipe } from '../../pipes/validation.pipe';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
-
-import * as Jimp from 'jimp';
+import { imageFileFilter } from '../common/image_handler/file-upload.utils';
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -36,7 +35,7 @@ export class AuthController {
   @UseInterceptors(
     FileInterceptor('userPhoto', {
       limits: { fileSize: 1024 * 1024 },
-      // dest: 'user_photos',
+      fileFilter: imageFileFilter,
     }),
   )
   @UsePipes(ValidationPipe)
@@ -44,30 +43,7 @@ export class AuthController {
     @UploadedFile() file: Express.Multer.File,
     @Body() signUpDto: SignUpDto,
   ) {
-    return await this.authService.signup(signUpDto);
-
-    const image = await Jimp.read(file.buffer);
-    const originalHeight = image.getHeight();
-    const originalWidth = image.getWidth();
-
-    let h = originalHeight;
-    let w = originalWidth;
-    let x = 0;
-    let y = 0;
-    if (originalWidth > 200) {
-      x = (originalWidth - 200) / 2;
-      w = 200;
-    }
-    if (originalHeight > 200) {
-      y = (originalHeight - 200) / 2;
-      h = 200;
-    }
-
-    await image.crop(x, y, w, h);
-    await image.writeAsync('user_photos/output.png');
-
-    // console.log(file);
-    // console.log(signUpDto);
+    return await this.authService.signup(signUpDto, file.buffer);
   }
 
   @ApiOperation({ summary: 'sign-in the user' })

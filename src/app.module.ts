@@ -9,7 +9,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UtilsModule } from './modules/common/utils.module';
 import { Role } from './modules/roles/roles.entity';
 import { UserToRoles } from './modules/roles/user-roles.entity';
-import { Token } from './modules/auth/token/token.entity';
+import { Token } from './modules/token/token.entity';
+import { TokenModule } from './modules/token/token.module';
 
 @Module({
   controllers: [],
@@ -31,6 +32,7 @@ import { Token } from './modules/auth/token/token.entity';
     }),
     UsersModule,
     AuthModule,
+    TokenModule,
     RolesModule,
     UtilsModule,
   ],

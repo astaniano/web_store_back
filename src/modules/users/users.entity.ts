@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Token } from '../auth/token/token.entity';
+import { Token } from '../token/token.entity';
 import { UserToRoles } from '../roles/user-roles.entity';
 
 @Entity('users')

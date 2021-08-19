@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TokenService } from './token.service';
 import { JwtModule } from '@nestjs/jwt';
 import { Token } from './token.entity';
-import { User } from '../../users/users.entity';
+import { User } from '../users/users.entity';
 // import { Role } from '../../roles/roles.entity';
 // import { UserRolesModel } from '../../roles/user-roles.model';
 

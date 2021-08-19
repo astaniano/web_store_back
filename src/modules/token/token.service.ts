@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Token } from './token.entity';
-import { User } from '../../users/users.entity';
+import { User } from '../users/users.entity';
 
 @Injectable()
 export class TokenService {
@@ -34,31 +34,29 @@ export class TokenService {
     };
   }
 
-  async saveRefreshToken(user_id: number, refresh_token: string) {
-    return await this.tokenRepo.save({ refresh_token, user_id });
+  async saveRefreshToken(userId: number, refreshToken: string) {
+    return await this.tokenRepo.save({ refreshToken, userId });
   }
 
   async updateRefreshToken(token: Token) {
     return await this.tokenRepo.save(token);
   }
 
-  async deleteRefreshToken(refresh_token: string) {
-    return await this.tokenRepo.delete({ refresh_token });
+  async deleteRefreshToken(refreshToken: string) {
+    return await this.tokenRepo.delete({ refreshToken });
   }
 
-  validateRefreshToken(refresh_token: string) {
-    return this.jwtService.verify(refresh_token, {
-      secret: process.env.JWT_REFRESH_SECRET,
-    });
+  validateToken(token: string, secret: string) {
+    return this.jwtService.verify(token, { secret });
   }
 
-  async findRefreshToken(refresh_token: string) {
+  async findRefreshToken(refreshToken: string) {
     return await this.tokenRepo.findOne({
-      where: { refresh_token },
+      where: { refreshToken },
     });
   }
 
-  async findRefreshTokenByUserId(user_id: number) {
-    return await this.tokenRepo.findOne({ where: { user_id } });
+  async findRefreshTokenByUserId(userId: number) {
+    return await this.tokenRepo.findOne({ where: { userId } });
   }
 }

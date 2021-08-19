@@ -3,10 +3,10 @@ import { AuthService } from './auth.service';
 import { forwardRef } from '@nestjs/common';
 import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
-import { Token } from './token/token.entity';
+import { Token } from '../token/token.entity';
 import { User } from '../users/users.entity';
 import { UtilsModule } from '../common/utils.module';
-import { TokenService } from './token/token.service';
+import { TokenService } from '../token/token.service';
 // import { Role } from '../roles/roles.entity';
 // import { UserRolesModel } from '../roles/user-roles.model';
 

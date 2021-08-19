@@ -6,7 +6,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { User } from '../../users/users.entity';
+import { User } from '../users/users.entity';
 
 // interface TokenCreationAttrs {
 //   refresh_token: string;
@@ -20,12 +20,12 @@ export class Token {
   id: number;
 
   @ApiProperty({ example: 'fasdiofjsaf', description: 'refresh token' })
-  @Column({ type: 'varchar', length: 450 })
-  refresh_token: string;
+  @Column({ name: 'refresh_token', type: 'varchar', length: 450 })
+  refreshToken: string;
 
   @ApiProperty({ example: '1', description: 'id of the user' })
   @Column({ name: 'user_id' })
-  user_id: number;
+  userId: number;
 
   @OneToOne(() => User, (user: User) => user.token)
   @JoinColumn({ name: 'user_id' })

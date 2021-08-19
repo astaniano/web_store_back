@@ -4,11 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { MailService } from '../common/mailer/mail.service';
 import { SignInDto } from './dto/sign-in.dto';
-import { TokenService } from './token/token.service';
+import { TokenService } from '../token/token.service';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/users.entity';
 import { SignUpDto } from './dto/sign-up.dto';
-import { Token } from './token/token.entity';
+import { Token } from '../token/token.entity';
 import { ImageService } from '../common/image_handler/image.service';
 
 @Injectable()
@@ -41,7 +41,7 @@ export class AuthService {
     const image = await this.imageService.cropImage(img, 200, 200);
     await this.imageService.saveImageInFs(
       image,
-      `src/modules/users/photos/${createdUser.id}`,
+      `user_photos/${createdUser.id}`,
     );
 
     // todo uncomment here (it works) in order to send email during signup
@@ -92,10 +92,13 @@ export class AuthService {
     await this.userService.updateUser(user);
   }
 
-  async refresh(refresh_token: string) {
-    const userData = this.tokenService.validateRefreshToken(refresh_token);
+  async refresh(refreshToken: string) {
+    const userData = this.tokenService.validateToken(
+      refreshToken,
+      process.env.JWT_REFRESH_SECRET,
+    );
     const recordWithToken = await this.tokenService.findRefreshToken(
-      refresh_token,
+      refreshToken,
     );
     if (!userData || !recordWithToken) {
       throw new HttpException(
@@ -111,7 +114,7 @@ export class AuthService {
     const tokens = await this.tokenService.generateTokens(user);
 
     if (recordWithToken !== null) {
-      recordWithToken.refresh_token = tokens.refreshToken;
+      recordWithToken.refreshToken = tokens.refreshToken;
       await this.tokenService.updateRefreshToken(recordWithToken);
     } else {
       await this.tokenService.saveRefreshToken(user.id, tokens.refreshToken);

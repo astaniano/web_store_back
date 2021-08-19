@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Res,
@@ -17,6 +19,7 @@ import { ValidationPipe } from '../../pipes/validation.pipe';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Response } from 'express';
 import * as path from 'path';
+import * as fs from 'fs';
 
 @ApiTags('users')
 @Controller('users')
@@ -38,6 +41,24 @@ export class UsersController {
   // @UseGuards(JwtAuthGuard)
   @Get(':id')
   getUserProfile(@Param() params, @Res() res: Response) {
-    res.sendFile(path.resolve(__dirname + '/../../../user_photos/32.jpeg'));
+    const pathToPhotosFolder = __dirname + '/../../../user_photos';
+    fs.readdir(pathToPhotosFolder, (err, files: string[]) => {
+      const regexForUserPhoto = new RegExp(params.id + '.*');
+      const userPhoto = files.find((file: string) => {
+        return regexForUserPhoto.test(file);
+      });
+
+      if (userPhoto) {
+        const readStream = fs.createReadStream(
+          path.resolve(`${__dirname}/../../../user_photos/${userPhoto}`),
+        );
+        readStream.pipe(res);
+      } else {
+        throw new HttpException(
+          'could not find user photo',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    });
   }
 }

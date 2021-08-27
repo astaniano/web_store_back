@@ -6,12 +6,15 @@ import { GrantRoleDto } from './dto/grant-role.dto';
 import { User } from './users.entity';
 import { RolesService } from '../roles/roles.service';
 import { UserToRoles } from '../roles/user-roles.entity';
+import { ImageService } from '../common/image_handler/image.service';
+import * as path from 'path';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepo: Repository<User>,
     private roleService: RolesService,
+    private imageService: ImageService,
   ) {}
 
   async createUser(userToCreate: User) {
@@ -57,5 +60,28 @@ export class UsersService {
     //   HttpStatus.NOT_FOUND,
     // );
     return null;
+  }
+
+  async getUserPhoto(userId: number) {
+    try {
+      const absolutePathToPhotosFolder = path.resolve(
+        `${__dirname}/../../../user_photos`,
+      );
+
+      // userPhoto example: "33.jpg" where 33 is userId
+      const userPhoto = await this.imageService.findImageInFolder(
+        absolutePathToPhotosFolder,
+        userId,
+      );
+
+      return this.imageService.getImage(
+        absolutePathToPhotosFolder + '/' + userPhoto,
+      );
+    } catch (e) {
+      throw new HttpException(
+        'could not find user photo',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

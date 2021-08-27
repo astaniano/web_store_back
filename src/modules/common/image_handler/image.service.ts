@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as Jimp from 'jimp';
+import * as fs from 'fs';
 
 @Injectable()
 export class ImageService {
@@ -27,8 +28,24 @@ export class ImageService {
 
   async saveImageInFs(img: Buffer, relativeImagePath: string) {
     const image = await Jimp.read(img);
-    const mime = image.getMIME(); // return example: 'image/jpen' OR 'image/png'
-    const imgExtention = mime.slice(mime.indexOf('/') + 1); // image/png => png
-    await image.writeAsync(`${relativeImagePath}.${imgExtention}`);
+    const mime = image.getMIME(); // return example: 'image/jpeg' OR 'image/png'
+    const imgExtension = mime.slice(mime.indexOf('/') + 1); // image/png => png
+    await image.writeAsync(`${relativeImagePath}.${imgExtension}`);
+  }
+
+  findImageInFolder(absolutePathToPhotosFolder: string, userId: number) {
+    return new Promise((res) => {
+      fs.readdir(absolutePathToPhotosFolder, (err, files: string[]) => {
+        const regexForUserPhoto = new RegExp(userId + '.*');
+        const userPhotoName = files.find((file: string) => {
+          return regexForUserPhoto.test(file);
+        });
+        res(userPhotoName);
+      });
+    });
+  }
+
+  getImage(imgPath: string) {
+    return fs.createReadStream(imgPath);
   }
 }

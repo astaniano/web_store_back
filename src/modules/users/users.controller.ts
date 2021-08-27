@@ -2,8 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   Post,
   Res,
@@ -38,27 +36,10 @@ export class UsersController {
 
   @ApiOperation({ summary: 'grant a role' })
   @ApiResponse({ status: 200 })
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  getUserProfile(@Param() params, @Res() res: Response) {
-    const pathToPhotosFolder = __dirname + '/../../../user_photos';
-    fs.readdir(pathToPhotosFolder, (err, files: string[]) => {
-      const regexForUserPhoto = new RegExp(params.id + '.*');
-      const userPhoto = files.find((file: string) => {
-        return regexForUserPhoto.test(file);
-      });
-
-      if (userPhoto) {
-        const readStream = fs.createReadStream(
-          path.resolve(`${__dirname}/../../../user_photos/${userPhoto}`),
-        );
-        readStream.pipe(res);
-      } else {
-        throw new HttpException(
-          'could not find user photo',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-    });
+  async getUserPhoto(@Param() params, @Res() res: Response) {
+    const readStream = await this.usersService.getUserPhoto(params.id);
+    readStream.pipe(res);
   }
 }

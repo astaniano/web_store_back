@@ -22,7 +22,7 @@ import { AuthService } from './auth.service';
 import { ValidationPipe } from '../../pipes/validation.pipe';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
-import { imageFileFilter } from '../common/image_handler/file-upload.utils';
+import { imageFileFilter } from '../common/image_handler/file-upload-filter';
 
 @ApiTags('Authorization')
 @Controller('auth')

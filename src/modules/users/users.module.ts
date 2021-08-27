@@ -7,6 +7,7 @@ import { UsersService } from './users.service';
 import { RolesModule } from '../roles/roles.module';
 import { AuthModule } from '../auth/auth.module';
 import { TokenModule } from '../token/token.module';
+import { UtilsModule } from '../common/utils.module';
 
 @Module({
   controllers: [UsersController],
@@ -16,6 +17,7 @@ import { TokenModule } from '../token/token.module';
     RolesModule,
     forwardRef(() => AuthModule),
     TokenModule,
+    UtilsModule,
   ],
   exports: [UsersService],
 })

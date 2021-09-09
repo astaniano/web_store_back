@@ -10,6 +10,7 @@ import { User } from '../users/users.entity';
 import { SignUpDto } from './dto/sign-up.dto';
 import { Token } from '../token/token.entity';
 import { ImageService } from '../common/image_handler/image.service';
+import { userDataDto } from './dto/user-data.dto';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +21,7 @@ export class AuthService {
     private tokenService: TokenService,
   ) {}
 
-  async signup(signUpDto: SignUpDto, img: Buffer) {
+  async signup(signUpDto: SignUpDto, img: Buffer): Promise<number> {
     const candidate = await this.userService.findUserByEmail(signUpDto.email);
     if (candidate) {
       throw new HttpException(
@@ -44,7 +45,7 @@ export class AuthService {
       `user_photos/${createdUser.id}`,
     );
 
-    // todo uncomment here (it works) in order to send email during signup
+    // todo uncomment here (it works) in order to send confirmation email during signup
     // await this.mailService.sendActivationMail(
     //   signUpDto.email,
     //   `${process.env.SERVER_URL}/auth/activate/${activationLink}`,
@@ -53,7 +54,7 @@ export class AuthService {
     return createdUser.id;
   }
 
-  async signin(userDto: SignInDto) {
+  async signin(userDto: SignInDto): Promise<userDataDto> {
     const user = await this.userService.findUserByEmail(userDto.email);
     if (!user) {
       throw new HttpException(
@@ -92,7 +93,7 @@ export class AuthService {
     await this.userService.updateUser(user);
   }
 
-  async refresh(refreshToken: string) {
+  async refresh(refreshToken: string): Promise<userDataDto> {
     const userData = this.tokenService.validateToken(
       refreshToken,
       process.env.JWT_REFRESH_SECRET,
@@ -110,8 +111,16 @@ export class AuthService {
     return await this.generateResponseWithTokens(user, recordWithToken);
   }
 
-  private async generateResponseWithTokens(user: User, recordWithToken: Token) {
-    const tokens = await this.tokenService.generateTokens(user);
+  private async generateResponseWithTokens(
+    user: User,
+    recordWithToken: Token,
+  ): Promise<userDataDto> {
+    const payload = {
+      email: user.email,
+      id: user.id,
+    };
+
+    const tokens = await this.tokenService.generateTokens(payload);
 
     if (recordWithToken !== null) {
       recordWithToken.refreshToken = tokens.refreshToken;

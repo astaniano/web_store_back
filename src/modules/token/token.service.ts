@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Token } from './token.entity';
-import { User } from '../users/users.entity';
+import { jwtPayloadDto } from '../auth/dto/jwt-payload.dto';
 
 @Injectable()
 export class TokenService {
@@ -13,12 +13,7 @@ export class TokenService {
     private jwtService: JwtService,
   ) {}
 
-  async generateTokens(user: User) {
-    const payload = {
-      email: user.email,
-      id: user.id,
-    };
-
+  async generateTokens(payload: jwtPayloadDto) {
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: '30m',
       secret: process.env.JWT_ACCESS_SECRET,

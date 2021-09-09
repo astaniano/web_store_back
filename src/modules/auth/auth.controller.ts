@@ -23,6 +23,7 @@ import { ValidationPipe } from '../../pipes/validation.pipe';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { imageFileFilter } from '../common/image_handler/file-upload-filter';
+import { userDataDto } from './dto/user-data.dto';
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -42,7 +43,7 @@ export class AuthController {
   async signup(
     @UploadedFile() file: Express.Multer.File,
     @Body() signUpDto: SignUpDto,
-  ) {
+  ): Promise<number> {
     return await this.authService.signup(signUpDto, file.buffer);
   }
 
@@ -53,7 +54,7 @@ export class AuthController {
   async signin(
     @Body() userDto: SignInDto,
     @Res({ passthrough: true }) response: Response,
-  ) {
+  ): Promise<userDataDto> {
     const userData = await this.authService.signin(userDto);
     response.cookie('refreshToken', userData.refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -67,7 +68,10 @@ export class AuthController {
   @ApiResponse({ status: 200 })
   @Post('/signout')
   @HttpCode(200)
-  async sigout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async signout(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const { refreshToken } = req.cookies;
     const tokenData = await this.authService.signout(refreshToken);
     res.clearCookie('refreshToken');
@@ -93,7 +97,7 @@ export class AuthController {
   async refresh(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ) {
+  ): Promise<userDataDto> {
     const { refreshToken } = req.cookies;
     if (!refreshToken) {
       throw new HttpException(

@@ -84,4 +84,22 @@ export class UsersService {
       );
     }
   }
+
+  async createUserTest() {
+    await this.userRepo.save({
+      email: 'uu@ukr.net',
+      password: '1234567',
+      firstName: '1234567',
+      lastName: '1234567',
+      activationLink: 'ffffff',
+    });
+
+    return 'created';
+  }
+
+  async getCreatedUserTest() {
+    return await this.userRepo.findOne({
+      where: { email: 'uu@ukr.net' },
+    });
+  }
 }

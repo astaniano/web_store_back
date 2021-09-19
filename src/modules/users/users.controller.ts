@@ -34,6 +34,25 @@ export class UsersController {
     return this.usersService.grantRole(dto);
   }
 
+  @Get('test')
+  async test() {
+    return 'it works';
+  }
+
+  @Get('test/create')
+  async test2() {
+    return this.usersService.createUserTest();
+  }
+
+  @Get('test/get')
+  async test3() {
+    return this.usersService.getCreatedUserTest();
+  }
+
+  // http://localhost:5000/users/test
+  // http://localhost:5000/users/test/create
+  // http://localhost:5000/users/test/get
+
   @ApiOperation({ summary: 'grant a role' })
   @ApiResponse({ status: 200 })
   @UseGuards(JwtAuthGuard)

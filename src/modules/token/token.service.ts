@@ -45,13 +45,13 @@ export class TokenService {
     return this.jwtService.verify(token, { secret });
   }
 
-  async findRefreshToken(refreshToken: string) {
+  async getRefreshToken(refreshToken: string) {
     return await this.tokenRepo.findOne({
       where: { refreshToken },
     });
   }
 
-  async findRefreshTokenByUserId(userId: number) {
+  async getRefreshTokenByUserId(userId: number) {
     return await this.tokenRepo.findOne({ where: { userId } });
   }
 }

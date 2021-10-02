@@ -74,11 +74,16 @@ export class AuthService {
       );
     }
 
-    return this.generateResponseWithTokens(user, null);
+    // below code is needed if user is already logged in and he logs in again
+    const recordWithToken = await this.tokenService.getRefreshTokenByUserId(
+      user.id,
+    );
+
+    return this.generateResponseWithTokens(user, recordWithToken);
   }
 
   async signout(refresh_token: string) {
-    return this.tokenService.deleteRefreshToken(refresh_token);
+    return await this.tokenService.deleteRefreshToken(refresh_token);
   }
 
   async activate(activationLink: string) {
@@ -98,7 +103,7 @@ export class AuthService {
       refreshToken,
       process.env.JWT_REFRESH_SECRET,
     );
-    const recordWithToken = await this.tokenService.findRefreshToken(
+    const recordWithToken = await this.tokenService.getRefreshToken(
       refreshToken,
     );
     if (!userData || !recordWithToken) {
@@ -122,7 +127,7 @@ export class AuthService {
 
     const tokens = await this.tokenService.generateTokens(payload);
 
-    if (recordWithToken !== null) {
+    if (recordWithToken !== null && recordWithToken !== undefined) {
       recordWithToken.refreshToken = tokens.refreshToken;
       await this.tokenService.updateRefreshToken(recordWithToken);
     } else {
